@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#5b5cf0">
+    <meta name="description" content="Lost & Found personal item tracker">
+    <title>Lost & Found</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="notificationContainer" class="notification-container" aria-live="polite"></div>
+
+<!-- ========================= AUTH ========================= -->
+<section id="authScreen" class="auth-screen">
+    <div class="auth-shell">
+
+        <header class="auth-topbar">
+            <div class="brand">
+                <div class="brand-mark">🔎</div>
+                <div>
+                    <strong>Lost &amp; Found</strong>
+                    <span>Smart item tracker</span>
+                </div>
+            </div>
+
+            <button id="authThemeButton" class="theme-button" type="button">
+                <span id="authThemeIcon">☀️</span>
+                <span id="authThemeText">Light</span>
+            </button>
+        </header>
+
+        <div class="auth-layout">
+            <div class="auth-copy">
+                <span class="eyebrow">YOUR PERSONAL COLLECTION</span>
+                <h1>Never forget where you kept something again.</h1>
+                <p>
+                    Save your items, add photos, remember their locations,
+                    and find them quickly whenever you need them.
+                </p>
+
+                <div class="auth-benefits">
+                    <div><span>📦</span><div><strong>Save everything</strong><small>Keep your important belongings organized.</small></div></div>
+                    <div><span>🔎</span><div><strong>Find instantly</strong><small>Search by name, category or location.</small></div></div>
+                    <div><span>🖼️</span><div><strong>Add photos</strong><small>See exactly which item you saved.</small></div></div>
+                </div>
+            </div>
+
+            <div class="auth-card">
+                <div class="auth-card-header">
+                    <span class="eyebrow">WELCOME</span>
+                    <h2 id="authTitle">Sign in</h2>
+                    <p id="authSubtitle">Sign in to access your saved items.</p>
+                </div>
+
+                <div class="auth-tabs">
+                    <button id="loginTab" class="auth-tab active" type="button">Login</button>
+                    <button id="registerTab" class="auth-tab" type="button">Create account</button>
+                </div>
+
+                <!-- LOGIN -->
+                <form id="loginForm" class="auth-form">
+                    <div class="form-group">
+                        <label for="loginEmail">Email address</label>
+                        <div class="input-shell">
+                            <span>✉</span>
+                            <input id="loginEmail" type="email" autocomplete="email"
+                                   placeholder="you@example.com" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <div class="input-shell">
+                            <span>🔒</span>
+                            <input id="loginPassword" type="password" autocomplete="current-password"
+                                   placeholder="Enter your password" required>
+                            <button class="password-toggle" type="button" data-target="loginPassword">Show</button>
+                        </div>
+                    </div>
+
+                    <button class="primary-button auth-submit" type="submit">
+                        <span>Sign in</span><span>→</span>
+                    </button>
+                </form>
+
+                <!-- REGISTER -->
+                <form id="registerForm" class="auth-form hidden">
+                    <div class="form-group">
+                        <label for="registerName">Your name</label>
+                        <div class="input-shell">
+                            <span>👤</span>
+                            <input id="registerName" type="text" autocomplete="name"
+                                   maxlength="80" placeholder="e.g. Alex" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="registerEmail">Email address</label>
+                        <div class="input-shell">
+                            <span>✉</span>
+                            <input id="registerEmail" type="email" autocomplete="email"
+                                   placeholder="you@example.com" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="registerPassword">Password</label>
+                        <div class="input-shell">
+                            <span>🔒</span>
+                            <input id="registerPassword" type="password" autocomplete="new-password"
+                                   minlength="6" placeholder="At least 6 characters" required>
+                            <button class="password-toggle" type="button" data-target="registerPassword">Show</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="registerConfirmPassword">Confirm password</label>
+                        <div class="input-shell">
+                            <span>✓</span>
+                            <input id="registerConfirmPassword" type="password" autocomplete="new-password"
+                                   minlength="6" placeholder="Re-enter your password" required>
+                            <button class="password-toggle" type="button" data-target="registerConfirmPassword">Show</button>
+                        </div>
+                    </div>
+
+                    <button class="primary-button auth-submit" type="submit">
+                        <span>Create account</span><span>→</span>
+                    </button>
+                </form>
+
+                <p class="auth-note">
+                    Your password is securely hashed on the backend.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========================= APP ========================= -->
+<section id="dashboardScreen" class="dashboard-screen hidden">
+
+    <header class="topbar">
+        <div class="brand-area">
+            <div class="brand-mark">🔎</div>
+            <div>
+                <h1>Lost &amp; Found</h1>
+                <p>Manage your saved items</p>
+            </div>
+        </div>
+
+        <div class="topbar-actions">
+            <div class="user-chip">
+                <span class="user-avatar" id="userAvatar">U</span>
+                <span id="currentUserName">User</span>
+            </div>
+
+            <button id="themeToggleButton" class="theme-button" type="button">
+                <span id="themeIcon">☀️</span>
+                <span id="themeText">Light</span>
+            </button>
+
+            <button id="logoutButton" class="secondary-button" type="button">Logout</button>
+        </div>
+    </header>
+
+    <main class="dashboard">
+
+        <!-- DASHBOARD SUMMARY: loaded immediately after login -->
+        <section class="summary-grid" aria-label="Collection summary">
+            <div class="summary-card">
+                <div class="summary-icon">📦</div>
+                <div>
+                    <span class="summary-label">Total Items</span>
+                    <strong id="totalItemsCount">0</strong>
+                    <small>Saved in your collection</small>
+                </div>
+            </div>
+
+            <div class="summary-card">
+                <div class="summary-icon">🗂️</div>
+                <div>
+                    <span class="summary-label">Categories</span>
+                    <strong id="totalCategoriesCount">0</strong>
+                    <small>Different categories</small>
+                </div>
+            </div>
+
+            <div class="summary-card">
+                <div class="summary-icon">📍</div>
+                <div>
+                    <span class="summary-label">Locations</span>
+                    <strong id="totalLocationsCount">0</strong>
+                    <small>Places where items are kept</small>
+                </div>
+            </div>
+        </section>
+
+        <nav class="dashboard-nav" aria-label="Dashboard sections">
+            <button id="findNavButton" class="nav-button active" type="button">
+                <span>🔎</span><span>Find Item</span>
+            </button>
+            <button id="addNavButton" class="nav-button" type="button">
+                <span>＋</span><span>Add Item</span>
+            </button>
+            <button id="savedNavButton" class="nav-button" type="button">
+                <span>📦</span><span>Saved Items</span>
+            </button>
+        </nav>
+
+        <!-- FIND -->
+        <section id="findSection" class="dashboard-section">
+            <div class="section-header">
+                <span class="eyebrow">SEARCH</span>
+                <h2>Find an Item</h2>
+                <p>Search by name, category, location or description.</p>
+            </div>
+
+            <form id="findForm" class="find-form">
+                <div class="input-shell search-input">
+                    <span>🔎</span>
+                    <input id="findInput" type="search"
+                           placeholder="e.g. keys, wallet, classroom..."
+                           autocomplete="off">
+                </div>
+                <button class="primary-button" type="submit">Find Item</button>
+            </form>
+
+            <div id="findResult" class="find-result" aria-live="polite"></div>
+        </section>
+
+        <!-- ADD -->
+        <section id="addSection" class="dashboard-section hidden">
+            <div class="section-header">
+                <span class="eyebrow">NEW ITEM</span>
+                <h2>Add Item</h2>
+                <p>Save the details of an item so you can find it later.</p>
+            </div>
+
+            <form id="itemForm" class="item-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="itemName">Item Name <span>*</span></label>
+                        <input id="itemName" type="text" maxlength="100"
+                               placeholder="e.g. House Keys" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="itemCategory">Category <span>*</span></label>
+                        <input id="itemCategory" type="text" maxlength="100"
+                               placeholder="e.g. Personal" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="itemLocation">Location <span>*</span></label>
+                        <input id="itemLocation" type="text" maxlength="150"
+                               placeholder="e.g. Bedroom drawer" required>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="itemDescription">Description</label>
+                        <textarea id="itemDescription" rows="4" maxlength="500"
+                                  placeholder="Add any useful details..."></textarea>
+                        <div class="character-counter"><span id="addDescriptionCounter">0</span> / 500</div>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="itemImage">Item Image</label>
+                        <div class="file-input-wrapper">
+                            <input id="itemImage" type="file" accept="image/jpeg,image/png,image/webp">
+                            <label for="itemImage" class="file-input-label">
+                                <span class="file-icon">🖼️</span>
+                                <span>
+                                    <strong>Choose an image</strong>
+                                    <small>JPG, PNG or WEBP • Maximum 5 MB</small>
+                                </span>
+                            </label>
+                        </div>
+
+                        <div id="imagePreviewContainer" class="image-preview-container hidden">
+                            <img id="imagePreview" class="image-preview" alt="Selected image preview">
+                            <div class="image-preview-info">
+                                <span id="imageFileName"></span>
+                                <button id="removeImageButton" type="button" class="danger-outline-button">Remove</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="primary-button" type="submit">＋ Add Item</button>
+            </form>
+        </section>
+
+        <!-- SAVED ITEMS: list is loaded ONLY when this tab is opened -->
+        <section id="savedSection" class="dashboard-section hidden">
+            <div class="section-header section-header-row">
+                <div>
+                    <span class="eyebrow">COLLECTION</span>
+                    <h2>Saved Items</h2>
+                    <p>Search, filter, edit or delete your saved items.</p>
+                </div>
+                <button id="refreshItemsButton" class="secondary-button" type="button">↻ Refresh</button>
+            </div>
+
+            <div class="filters">
+                <div class="input-shell">
+                    <span>🔎</span>
+                    <input id="searchInput" type="search"
+                           placeholder="Search saved items..." autocomplete="off">
+                </div>
+
+                <select id="categoryFilter">
+                    <option value="">All Categories</option>
+                </select>
+
+                <select id="locationFilter">
+                    <option value="">All Locations</option>
+                </select>
+
+                <button id="clearFiltersButton" class="secondary-button" type="button">Clear</button>
+            </div>
+
+            <p id="filterResultInfo" class="filter-result-info hidden"></p>
+
+            <div id="itemsList" class="items-list">
+                <p class="empty-message">Click “Saved Items” to load your collection.</p>
+            </div>
+        </section>
+    </main>
+</section>
+
+<!-- ========================= EDIT MODAL ========================= -->
+<div id="editModal" class="modal hidden" aria-hidden="true">
+    <div id="editModalOverlay" class="modal-overlay"></div>
+
+    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="editModalTitle">
+        <div class="modal-header">
+            <div>
+                <span class="eyebrow">UPDATE</span>
+                <h2 id="editModalTitle">Edit Item</h2>
+            </div>
+            <button id="closeEditModalButton" class="modal-close" type="button" aria-label="Close">×</button>
+        </div>
+
+        <form id="editItemForm" class="item-form">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="editItemName">Item Name <span>*</span></label>
+                    <input id="editItemName" type="text" maxlength="100" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="editItemCategory">Category <span>*</span></label>
+                    <input id="editItemCategory" type="text" maxlength="100" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="editItemLocation">Location <span>*</span></label>
+                    <input id="editItemLocation" type="text" maxlength="150" required>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="editItemDescription">Description</label>
+                    <textarea id="editItemDescription" rows="4" maxlength="500"></textarea>
+                    <div class="character-counter"><span id="editDescriptionCounter">0</span> / 500</div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Current Image</label>
+                    <div class="current-image-box">
+                        <img id="editCurrentImage" class="edit-current-image hidden" alt="Current item image">
+                        <div id="editNoImage" class="no-image-message">
+                            <span>🖼️</span><p>No image available</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="editItemImage">Replace Image</label>
+                    <div class="file-input-wrapper">
+                        <input id="editItemImage" type="file" accept="image/jpeg,image/png,image/webp">
+                        <label for="editItemImage" class="file-input-label">
+                            <span class="file-icon">🖼️</span>
+                            <span>
+                                <strong>Choose replacement</strong>
+                                <small>JPG, PNG or WEBP • Maximum 5 MB</small>
+                            </span>
+                        </label>
+                    </div>
+
+                    <div id="editImagePreviewContainer" class="image-preview-container hidden">
+                        <img id="editImagePreview" class="image-preview" alt="New image preview">
+                        <div class="image-preview-info">
+                            <span id="editImageFileName"></span>
+                            <button id="removeEditImageButton" type="button" class="danger-outline-button">Remove</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button id="cancelEditButton" class="secondary-button" type="button">Cancel</button>
+                <button id="saveEditButton" class="primary-button" type="submit">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
