@@ -2,7 +2,8 @@
 // LOST & FOUND - AUTHENTICATED FRONTEND
 // ============================================================
 
-const API_BASE_URL = "https://find-the-object-3.onrender.com/api"; const IMAGE_BASE_URL = "https://find-the-object-3.onrender.com";
+const API_BASE_URL = "https://remeber-and-found.onrender.com/api";
+const IMAGE_BASE_URL = "https://remeber-and-found.onrender.com";
 
 const $ = (id) => document.getElementById(id);
 
